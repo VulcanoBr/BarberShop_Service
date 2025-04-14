@@ -1,0 +1,24 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+  <div style="text-align: center; padding: 10px; background-color: #f8f9fa; margin-bottom: 20px;">
+    <h1 style="color: #343a40;">Confirmação de Agendamento</h1>
+  </div>
+  
+  <p>Olá <strong><%= @appointment.client_name %></strong>,</p>
+  
+  <p>Seu agendamento foi confirmado com sucesso!</p>
+  
+  <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Detalhes do Agendamento:</h3>
+    <p><strong>Serviço:</strong> <%= @service.name %></p>
+    <p><strong>Valor:</strong> <%= format_price(@appointment.price) %></p>
+    <p><strong>Data:</strong> <%= l @appointment.appointment_date, format: :long %></p>
+    <p><strong>Horário:</strong> <%= l @appointment.start_time, format: :default %></p>
+    <p><strong>Profissional:</strong> <%= @employee.surname %></p>
+  </div>
+
+  <p>Caso precise cancelar ou reagendar, entre em contato conosco com pelo menos 24 horas de antecedência.</p>
+  
+  <p>Agradecemos pela preferência.</p>
+  
+  <p style="margin-top: 30px;">Atenciosamente,<br>Tesoura De Ouro</p>
+</div>

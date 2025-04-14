@@ -1,0 +1,23 @@
+<%= simple_form_for([:admin, @employee]) do |f| %>
+
+  <div class="mb-3">
+    <%= f.input :name, label: 'Nome do Funcionario', required: true, input_html: { class: 'form-control' } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.input :surname, label: 'Apelido', required: true, input_html: { class: 'form-control' } %>
+  </div>
+
+  <div class="col-12">
+        <%= f.input :active,
+                    as: :boolean,
+                    wrapper_html: { class: 'form-check form-switch' },
+                    input_html: { class: 'form-check-input' },
+                    label_html: { class: 'form-check-label' } %>
+  </div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancelar', admin_employees_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

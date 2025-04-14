@@ -1,0 +1,33 @@
+<%= simple_form_for([:admin, @service]) do |f| %>
+
+  <div class="mb-3">
+    <%= f.input :name, label: 'Nome do Serviço', required: true, input_html: { class: 'form-control' } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.input :description, label: 'Descrição do Serviço', required: true, input_html: { class: 'form-control' } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.input :price,
+                label: 'Preço (R$)',
+                placeholder: "R$ 0.00",
+                required: true,
+                input_html: { class: 'form-control', step: '0.01' }, # step para permitir centavos
+                hint: 'Use ponto como separador decimal (ex: 50.00)' %>
+                <%# Nota: O helper number_to_currency é para *exibição*, aqui usamos o input padrão %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.input :duration,
+                label: 'Duração (minutos)',
+                required: true,
+                input_html: { class: 'form-control', value: f.object.duration || 60 }, # Valor padrão 60 se for novo
+                hint: 'Tempo padrão é 60 minutos.' %>
+  </div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancelar', admin_services_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

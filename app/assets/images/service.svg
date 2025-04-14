@@ -1,0 +1,54 @@
+<svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Fundo Cinza -->
+  <rect width="100%" height="100%" fill="#CCCCCC"/>
+
+  <!-- Elementos da Barbearia (Agrupados para facilitar o posicionamento) -->
+  <g transform="translate(20, 30)" fill="none" stroke="black" stroke-width="3">
+
+    <!-- Tesoura (Simplificada) -->
+    <g transform="translate(10, 0) scale(0.8)">
+      <path d="M20,20 L60,60 M60,20 L20,60" stroke-linecap="round"/>
+      <circle cx="15" cy="15" r="12" stroke-width="2.5"/>
+      <circle cx="65" cy="65" r="12" stroke-width="2.5"/>
+      <circle cx="40" cy="40" r="4" fill="black" stroke="none"/>
+    </g>
+
+    <!-- Pente (Simplificado) -->
+    <g transform="translate(110, 5)">
+      <rect x="0" y="0" width="65" height="12" rx="2" fill="black" stroke="none"/>
+      <line x1="5"  y1="12" x2="5"  y2="45" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="12" y2="45" stroke-linecap="round"/>
+      <line x1="19" y1="12" x2="19" y2="45" stroke-linecap="round"/>
+      <line x1="26" y1="12" x2="26" y2="45" stroke-linecap="round"/>
+      <line x1="33" y1="12" x2="33" y2="45" stroke-linecap="round"/>
+      <line x1="40" y1="12" x2="40" y2="45" stroke-linecap="round"/>
+      <line x1="47" y1="12" x2="47" y2="45" stroke-linecap="round"/>
+      <line x1="54" y1="12" x2="54" y2="45" stroke-linecap="round"/>
+      <line x1="61" y1="12" x2="61" y2="35" stroke-linecap="round"/> <!-- Dente menor no final -->
+    </g>
+
+    <!-- Espelho de Mão (Simplificado) -->
+    <g transform="translate(210, 0)">
+       <ellipse cx="30" cy="35" rx="28" ry="35" fill="#E0E0E0" stroke="black" stroke-width="2.5"/>
+       <rect x="25" y="70" width="10" height="35" rx="3" fill="black" stroke="none"/>
+    </g>
+
+    <!-- Bigode (Simplificado) -->
+    <g transform="translate(300, 20)">
+      <path d="M 0 20 C 5 0, 25 0, 30 20 C 35 0, 55 0, 60 20 C 45 35, 15 35, 0 20 Z" fill="black" stroke="none"/>
+    </g>
+
+  </g>
+
+  <!-- Texto "Barbershop" -->
+  <text x="200" y="170"
+        font-family="Arial, sans-serif"
+        font-size="36"
+        font-weight="bold"
+        fill="black"
+        text-anchor="middle">
+    Barbershop
+  </text>
+
+</svg>

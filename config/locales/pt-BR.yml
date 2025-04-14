@@ -1,0 +1,99 @@
+# config/locales/pt-BR.yml
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        appointment:
+          attributes:
+            service:
+              blank: 'não pode ficar em branco'
+            start_date:
+              blank: 'não pode ficar em branco'
+            end_date:
+              blank: 'não pode ficar em branco'
+            start_time:
+              blank: 'não pode ficar em branco'
+            client_email:
+              blank: 'não pode ficar em branco'
+              invalid: 'não é um endereço de email válido'
+            service:
+              blank: 'não pode ficar em branco'
+              invalid: 'é inválido'
+              required: 'é obrigatorio'
+          blank: 'não pode ficar em branco'
+        service:
+          attributes:
+            price:
+              blank: 'não pode ficar em branco'
+              not_a_number: 'não e um numero'
+              greater_than: 'tem que ser maior que 0.00 (zero)'
+      messages:
+        blank: 'não pode ficar em branco'
+  errors:
+    attributes:
+      service:
+        blank: 'não pode ficar em branco'
+        invalid: 'é inválido'
+        required: 'é obrigatorio'
+      start_date:
+        blank: 'não pode ficar em branco'
+      end_date:
+        blank: 'não pode ficar em branco'
+      start_time:
+        blank: 'não pode ficar em branco'
+      client_email:
+        blank: 'não pode ficar em branco'
+        invalid: 'não é um endereço de email válido'
+    messages:
+      blank: 'não pode ficar em branco'
+      invalid: 'é inválido'
+  date:
+    formats:
+      default: '%d/%m/%Y'
+      long: '%d de %B de %Y'
+      short: '%d de %B'
+      with_weekday: '%d/%m/%Y (%A)'
+    day_names:
+      [
+        Domingo,
+        Segunda-feira,
+        Terça-feira,
+        Quarta-feira,
+        Quinta-feira,
+        Sexta-feira,
+        Sábado
+      ]
+    abbr_day_names: [Dom, Seg, Ter, Qua, Qui, Sex, Sáb]
+    month_names:
+      -
+      - Janeiro
+      - Fevereiro
+      - Março
+      - Abril
+      - Maio
+      - Junho
+      - Julho
+      - Agosto
+      - Setembro
+      - Outubro
+      - Novembro
+      - Dezembro
+    abbr_month_names:
+      -
+      - Jan
+      - Fev
+      - Mar
+      - Abr
+      - Mai
+      - Jun
+      - Jul
+      - Ago
+      - Set
+      - Out
+      - Nov
+      - Dez
+  time:
+    formats:
+      default: '%H:%M:%S'
+      long: '%d de %B de %Y, %H:%M'
+      short: '%d de %B, %H:%M'

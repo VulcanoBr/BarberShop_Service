@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Barbearia</title> <%# Título diferente para admin %>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+</head>
+<body>
+  <div class="container-fluid">
+      <div class="row">
+        <%= render 'admin/shared/sidebar' %>
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+
+  <footer class="py-3 bg-dark text-center fw-bold text-white">
+    <div class="container">
+      <p class="style="font-family: 'Playfair Display'" >© <%= Date.current.year %> Área Administrativa - <i class="bi bi-scissors" ></i> De Ouro</p>
+    </div>
+  </footer>
+  <%= render "layouts/flash" %>
+</body>
+</html>

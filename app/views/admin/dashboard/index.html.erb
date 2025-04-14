@@ -1,0 +1,161 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Dashboard</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <%= link_to new_admin_service_path, class: "btn btn-sm btn-outline-secondary" do %>
+        <i class="bi bi-plus"></i> Novo Serviço
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card mb-4 text-bg-primary">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title">Total de Agendamentos</h5>
+            <h2 class="display-6"><%= @appointments_count %></h2>
+          </div>
+          <i class="bi bi-calendar-check" style="font-size: 3rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card mb-4 text-bg-success">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title">Agendamentos do Mês</h5>
+            <h2 class="display-6"><%= @month_appointments %></h2>
+          </div>
+          <i class="bi bi-graph-up" style="font-size: 3rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card mb-4 text-bg-info">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title">Serviços Disponíveis</h5>
+            <h2 class="display-6"><%= @services_count %></h2>
+          </div>
+          <i class="bi bi-list-ul" style="font-size: 3rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Agendamentos de Hoje - <%= format_date_br(Date.today) %> </h5>
+        <div>
+          <% if @pagy_today.count > 6 %>
+            <%== pagy_bootstrap_nav(@pagy_today).html_safe %>
+          <% end %>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <% if @today_appointments.any? %>
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th>Horário</th>
+                  <th>Profissional</th>
+                  <th>Cliente</th>
+                  <th>Serviço</th>
+                  
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @today_appointments.each do |appointment| %>
+                  <tr>
+                    <td><%= appointment.start_time.strftime('%H:%M') %></td>
+                    <td><%= appointment.employee.surname %></td>
+                    <td><%= appointment.client_name %></td>
+                    <td><%= appointment.service.name %></td>
+                    
+                    <td>
+                      <%= link_to admin_appointment_path(appointment), class: "btn btn-sm btn-outline-primary" do %>
+                        <i class="bi bi-eye"></i>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="p-4 text-center">
+            <p class="text-muted mb-0">Não há agendamentos para hoje.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center ">
+        <h5 class="card-title mb-0">Próximos Agendamentos</h5>
+        <div class="class="pagy-nav-bootstrap-compact">
+          <% if @pagy_upcoming.count > 6 %>
+            <%== pagy_bootstrap_nav(@pagy_upcoming).html_safe %>
+          <% end %>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <% if @upcoming_appointments.any? %>
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Profissional</th>
+                  <th>Cliente</th>
+                  <th>Serviço</th>
+                  
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @upcoming_appointments.each do |appointment| %>
+                  <tr>
+                    <td><%= l appointment.appointment_date, format: :short %></td>
+                    <td><%= appointment.start_time.strftime('%H:%M') %></td>
+                    <td><%= appointment.employee.surname %></td>
+                    <td><%= appointment.client_name %></td>
+                    <td><%= appointment.service.name %></td>
+                    <td>
+                      <%= link_to admin_appointment_path(appointment), class: "btn btn-sm btn-outline-primary" do %>
+                        <i class="bi bi-eye"></i>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="p-4 text-center">
+            <p class="text-muted mb-0">Não há agendamentos futuros.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

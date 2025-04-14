@@ -1,0 +1,25 @@
+<div class="container   py-5">
+  <div class="card">
+    <div class="card-header bg-success text-white text-center">
+      <h3>Agendamento Confirmado!</h3>
+    </div>
+    <div class="card-body py-3">
+      <h5 class="card-title">Olá, <%= @appointment.client_name %>!</h5>
+      <p class="card-text">Seu agendamento foi realizado com sucesso. Confira os detalhes:</p>
+      <ul>
+        <li><strong>Data:</strong> <%= format_date_br(@appointment.appointment_date) %></li>
+        <li><strong>Horário:</strong> <%= @appointment.start_time.strftime('%H:%M') %></li>
+        <li><strong>Serviço:</strong> <%= @appointment.service.name %> (<%= format_price(@appointment.price) %>)</li>
+        <li><strong>Profissional:</strong> <%= @appointment.employee.surname %> </li>
+        <li><strong>Email:</strong> <%= @appointment.client_email %></li>
+        <li><strong>Telefone:</strong> <%= @appointment.client_phone %></li>
+      </ul>
+      <p>Enviamos uma confirmação para o seu email: <%= @appointment.client_email %>.</p>
+      <p>Esperamos você!</p>
+      
+    </div>
+    <div class="card-footer ">
+      <%= link_to 'Agendar outro horário', new_appointment_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+</div>

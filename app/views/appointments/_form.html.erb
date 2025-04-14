@@ -1,0 +1,155 @@
+<div class="container mt-4">
+
+<div class="d-flex align-items-baseline gap-3 mb-3"> 
+    <h3 class="mb-0">Agendar Horário</h3> 
+    <p class="lead me-2 mb-0"> ( Selecione a data e o horário desejado.)</p> 
+  </div>
+
+<%# Usamos d-flex para garantir que as colunas fiquem lado a lado %>
+<div class="row mt-3">
+
+  <%# Coluna Esquerda: Calendário %>
+<%# Calendar View for Appointments with Month Persistence %>
+<div class="col-md-4 mb-4 mb-md-0">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <%= link_to new_appointment_path(month: (@current_month - 1.month).month, year: (@current_month - 1.month).year), class: "btn btn-sm btn-outline-secondary" do %>
+          <i class="bi bi-chevron-left"></i>
+        <% end %>
+      </div>
+      <div class="fw-bold">
+        <%= I18n.l(@current_month, format: "%B %Y") %>
+      </div>
+      <div>
+        <%= link_to new_appointment_path(month: (@current_month + 1.month).month, year: (@current_month + 1.month).year), class: "btn btn-sm btn-outline-secondary" do %>
+          <i class="bi bi-chevron-right"></i>
+        <% end %>
+      </div>
+    </div>
+    <div class="card-body p-2">
+      <table class="table table-bordered calendar-table">
+        <thead>
+          <tr>
+            <% %w(S T Q Q S S D).each do |day| %>
+              <th class="text-center"><%= day %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% date_range = (@current_month.beginning_of_month.beginning_of_week..@current_month.end_of_month.end_of_week).to_a %>
+          <% date_range.each_slice(7) do |week| %>
+            <tr>
+              <% week.each do |day| %>
+                <% 
+                  today = Date.current
+                  is_today = day == today
+                  is_selected = day == @selected_date
+                  is_current_month = day.month == @current_month.month
+                  is_past = day < today
+                  is_sunday = day.wday == 0
+                  is_future_available = day >= today && day <= (today + 30.days) && !is_sunday
+                  
+                  # CSS classes for the calendar cell
+                  classes = []
+                  classes << "bg-light text-muted" if !is_current_month
+                  classes << "bg-primary text-white" if is_selected
+                  classes << "border-primary" if is_today
+                  classes << "bg-light" if is_past || is_sunday
+                %>
+
+                <td class="calendar-day text-center <%= classes.join(' ') %>" style="height: 40px; width: 40px;">
+                  <% if is_future_available %>
+                    <%= link_to day.day.to_s, 
+                                new_appointment_path(
+                                  date: day.to_s,
+                                  month: @current_month.month,
+                                  year: @current_month.year
+                                ),
+                                class: "d-block w-100 h-100 #{'text-white' if is_selected}",
+                                style: "text-decoration: none;" %>
+                  <% else %>
+                    <span class="<%= is_current_month ? '' : 'text-muted' %>">
+                      <%= day.day %>
+                    </span>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="small text-muted mt-2">
+        <div class="mb-1"><span class="d-inline-block border border-primary me-1" style="width: 12px; height: 12px;"></span> Hoje</div>
+        <div><span class="d-inline-block bg-primary me-1" style="width: 12px; height: 12px;"></span> Selecionado</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <%# Coluna Direita: Formulário e Horários %>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        Detalhes do Agendamento para: <strong><%= format_date_br(@selected_date) %></strong>
+      </div>
+      <div class="card-body" data-controller="maskphone">
+        <%= simple_form_for @appointment, url: appointments_path, html: { data: { turbo: false } } do |f| %>
+          <%# Campo oculto para enviar a data selecionada %>
+          <%= f.hidden_field :appointment_date, value: @selected_date %>
+
+          <%# --- Seleção de Horário (Grade Bootstrap) --- %>
+          <div class="mb-3">
+            <%= f.label :time_employee_combined, "Horários Disponíveis", required: true, class: 'form-label fw-bold mb-2' %>
+
+            <% if @available_slots.empty? %>
+              <div class="alert alert-warning mt-1" role="alert">
+                Não há horários disponíveis para <%= format_date_br(@selected_date) %>. Por favor, selecione outra data.
+              </div>
+            <% else %>
+              <%= f.input :time_employee_combined, 
+                          collection: @available_slots,
+                          label: false,
+                          include_blank: "Selecione um horário",
+                          required: true,
+  
+                          input_html: { 
+                            class: "form-select" 
+                          } %>
+              
+            <% end %>
+          </div>
+
+          <hr>
+
+          <%# --- Seleção de Serviço --- %>
+          <%= f.association :service,
+                            collection: @services,
+                            label_method: :name_with_price,
+                            label: "Escolha o Serviço",
+                            prompt: "Selecione um serviço",
+                            input_html: { class: "form-select" },
+                            required: true %>
+
+          <hr>
+
+          <%# --- Dados do Cliente --- %>
+          <h5 class="mt-3" >Seus Dados</h5>
+          <%= f.input :client_name, label: "Nome Completo", required: true, input_html: { class: "form-control" } %>
+          <%= f.input :client_phone, label: "Telefone (com DDD)", required: true, input_html: { class: "form-control", 
+              placeholder: "(XX) XXXXX-XXXX", maxlength: "15", "data-maskphone-target": "inputPhone", 
+              "data-action": "keyup->maskphone#addMaskToPhoneFields" } 
+          %>
+
+          <%= f.input :client_email, label: "Email", required: true, input_html: { class: "form-control" } %>
+
+          <div class="d-flex d-grid gap-2 mt-4">
+            <%= f.button :submit, "Confirmar Agendamento", class: "btn btn-primary ", disabled: @available_slots.empty? %>
+            <%= link_to 'Cancelar', root_path, class: 'btn btn-secondary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

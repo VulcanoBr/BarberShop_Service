@@ -1,0 +1,133 @@
+
+
+<section class="container rounded  hero-section text-white d-flex justify-content-center align-items-center" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://img.freepik.com/fotos-premium/um-cartaz-para-o-nome-bat-batter_1262781-17888.jpg?ga=GA1.1.549088907.1743900653&semt=ais_hybrid&w=740') center center/cover no-repeat; min-height: 50vh;">
+  <div class="container rounded text-center"> <%# Adicionado container para melhor controle de largura %>
+
+    <%# H1 MODIFICADO %>
+    <h1 class="display-3 fw-bold mb-3" style="font-family: 'Playfair Display', serif; color: #FFD700;"> <%# Use a font-family do Google e a cor ouro %>
+        <i class="bi bi-scissors me-3"></i>De Ouro <%# Ícone dentro de <i> com espaço (me-2) e texto completo %>
+    </h1>
+
+    <p class="lead mb-4">Estilo, Tradição e Modernidade no Cuidado Masculino.</p>
+    <%= link_to "Agende Seu Horário", new_appointment_path, class: "btn btn-primary btn-lg fw-bold px-4 py-2" %>
+  </div>
+</section>
+
+<%# --- Seção Sobre Nós --- %>
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h2 class="fw-bold mb-3">Sobre Nossa Barbearia</h2>
+        <p class="text-muted">Fundada em [Ano], a [Nome da Barbearia] nasceu da paixão pela arte da barbearia clássica, combinada com as tendências modernas. Oferecemos um ambiente acolhedor e um serviço de excelência para o homem contemporâneo.</p>
+        <p class="text-muted">Nossa equipe é formada por barbeiros experientes e dedicados, prontos para oferecer o corte ou barba perfeita, utilizando produtos de alta qualidade e as melhores técnicas.</p>
+        <%= link_to "Conheça Nossos Serviços", '#services', class: "btn btn-outline-dark mt-2" %> <%# Link interno para a seção de serviços %>
+      </div>
+      <div class="col-lg-6">
+        <%# Idealmente, uma imagem atraente do interior da barbearia %>
+        <img src="https://img.freepik.com/fotos-premium/a-imagem-e-uma-foto-do-interior-de-uma-barbearia_14117-265923.jpg?w=1380" alt="Interior da Barbearia [Tesoura de]" class="img-fluid rounded shadow">
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# --- Seção Serviços --- %>
+<section id="services" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Nossos Serviços</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @services.each do |service| %>
+      <%# Exemplo de Card de Serviço (Idealmente, carregar do banco @services) %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <%= image_tag "service1.jpeg", class: "card-img-top", alt: "Ícone de Serviço" %>
+          <div class="card-body text-center">
+            <h5 class="card-title fw-bold"><%= service.name %></h5>
+            <p class="card-text text-muted"><%= service.description %></p>
+            <p class="fw-bold fs-5"><%= format_price(service.price) %></p> <%# Exemplo de Preço %>
+          </div>
+          <div class="card-footer bg-white border-0 text-center pb-3">
+             <%= link_to "Agendar", new_appointment_path, class: "btn btn-sm btn-primary" %>
+          </div>
+        </div>
+      </div>
+      <% end %>
+
+    </div>
+     <div class="text-center mt-5">
+        <%= link_to "Ver Todos e Agendar", list_services_path, class: "btn btn-dark btn-lg" %>
+    </div>
+  </div>
+</section>
+
+<%# --- Seção Diferenciais --- %>
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5 me-3">Por que escolher a <i class="bi bi-scissors "></i>
+      <span style="font-family: 'Playfair Display', serif; ">De Ouro </span>?</h2>
+    <div class="row text-center g-4">
+      <div class="col-md-4">
+         <%# Use ícones (Bootstrap Icons ou Font Awesome) - Exemplo com placeholder %>
+         <i class="bi bi-scissors fs-1 text-primary mb-3"></i> <%# Exemplo: Ícone Bootstrap Tesoura %>
+        <h5 class="fw-bold">Barbeiros Experientes</h5>
+        <p class="text-muted">Profissionais qualificados e apaixonados pelo que fazem.</p>
+      </div>
+      <div class="col-md-4">
+         <i class="bi bi-shop fs-1 text-primary mb-3"></i> <%# Exemplo: Ícone Bootstrap Loja %>
+        <h5 class="fw-bold">Ambiente Agradável</h5>
+        <p class="text-muted">Um espaço pensado para o seu conforto e bem-estar.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-calendar-check fs-1 text-primary mb-3"></i> <%# Exemplo: Ícone Bootstrap Calendário %>
+        <h5 class="fw-bold">Agendamento Online</h5>
+        <p class="text-muted">Marque seu horário de forma rápida e fácil a qualquer hora.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# --- Seção Galeria (Opcional) --- %>
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Nossa Galeria</h2>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+            <%# Adicione imagens da barbearia, cortes, etc. %>
+            <div class="col"><img src="https://img.freepik.com/fotos-gratis/barbero-que-mostra-o-resultado-ao-cliente_23-2147737048.jpg?t=st=1743901343~exp=1743904943~hmac=905be5fbe28ab5751f599d01135599a41642714d5df31394cc9621451d6d0494&w=1380" alt="Galeria Barbearia 1" class="img-fluid rounded shadow-sm"></div>
+            <div class="col"><img src="https://img.freepik.com/fotos-gratis/homem-bonito-em-uma-barbearia-estilo-de-cabelo_1303-20977.jpg?ga=GA1.1.549088907.1743900653&semt=ais_hybrid&w=740" alt="Galeria Barbearia 2" class="img-fluid rounded shadow-sm"></div>
+            <div class="col"><img src="https://img.freepik.com/fotos-gratis/cliente-de-grooming-mulher-na-barbearia_23-2147737070.jpg?ga=GA1.1.549088907.1743900653&semt=ais_hybrid&w=740" alt="Galeria Barbearia 3" class="img-fluid rounded shadow-sm"></div>
+            <div class="col"><img src="https://img.freepik.com/fotos-gratis/secao-intermediaria-do-barbeiro-aplicando-creme-na-barba-do-cliente_107420-94759.jpg?ga=GA1.1.549088907.1743900653&semt=ais_hybrid&w=740" alt="Galeria Barbearia 4" class="img-fluid rounded shadow-sm"></div>
+            <%# Adicione mais colunas/imagens %>
+        </div>
+    </div>
+</section>
+
+
+<%# --- Seção Contato e Localização --- %>
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Visite-nos</h2>
+    <div class="row">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h5 class="fw-bold">Endereço:</h5>
+        <p class="text-muted">Rua Exemplo, 123 - Bairro Exemplo<br>Cidade - Estado, CEP 00000-000</p>
+
+        <h5 class="fw-bold mt-4">Horário de Funcionamento:</h5>
+        <p class="text-muted">Segunda a Sábado: 8:00 às 18:00<br>Domingo: Fechado</p>
+
+        <h5 class="fw-bold mt-4">Contato:</h5>
+        <p class="text-muted">Telefone: (XX) YYYYY-ZZZZ<br>Email: contato@tesouradeouro.com.br</p>
+
+         <%# Links de Redes Sociais (Opcional) %>
+         <div class="mt-4">
+            <a href="#" class="text-dark me-3"><i class="bi bi-instagram fs-4"></i></a> <%# Exemplo Ícone Instagram %>
+            <a href="#" class="text-dark me-3"><i class="bi bi-facebook fs-4"></i></a> <%# Exemplo Ícone Facebook %>
+            <a href="#" class="text-dark"><i class="bi bi-whatsapp fs-4"></i></a> <%# Exemplo Ícone WhatsApp %>
+         </div>
+      </div>
+      <div class="col-lg-6">
+        <%# Incorporar Mapa do Google Maps - Substitua o src pelo embed real %>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.188029167435!2d-43.17490858559136!3d-22.90641378501198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x997f58a6a00001%3A0x9431d8ff6a5e9e14!2sCentro%2C%20Rio%20de%20Janeiro%20-%20RJ!5e0!3m2!1spt-BR!2sbr!4v1678886538991!5m2!1spt-BR!2sbr" width="100%" height="350" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
