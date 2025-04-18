@@ -1,14 +1,14 @@
 
-
 <section class="container rounded  hero-section text-white d-flex justify-content-center align-items-center" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://img.freepik.com/fotos-premium/um-cartaz-para-o-nome-bat-batter_1262781-17888.jpg?ga=GA1.1.549088907.1743900653&semt=ais_hybrid&w=740') center center/cover no-repeat; min-height: 50vh;">
   <div class="container rounded text-center"> <%# Adicionado container para melhor controle de largura %>
 
     <%# H1 MODIFICADO %>
     <h1 class="display-3 fw-bold mb-3" style="font-family: 'Playfair Display', serif; color: #FFD700;"> <%# Use a font-family do Google e a cor ouro %>
         <i class="bi bi-scissors me-3"></i>De Ouro <%# Ícone dentro de <i> com espaço (me-2) e texto completo %>
-    </h1>
-
-    <p class="lead mb-4">Estilo, Tradição e Modernidade no Cuidado Masculino.</p>
+    <h3 className="display-3 fw-bold mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                O estilo que define o homem moderno </h3>
+    <p class="lead mb-4">Oferecemos serviços de alta qualidade para homens que valorizam Estilo, Tradição 
+      e Modernidade no Cuidado Masculino. </p>
     <%= link_to "Agende Seu Horário", new_appointment_path, class: "btn btn-primary btn-lg fw-bold px-4 py-2" %>
   </div>
 </section>
@@ -19,7 +19,7 @@
     <div class="row align-items-center">
       <div class="col-lg-6 mb-4 mb-lg-0">
         <h2 class="fw-bold mb-3">Sobre Nossa Barbearia</h2>
-        <p class="text-muted">Fundada em [Ano], a [Nome da Barbearia] nasceu da paixão pela arte da barbearia clássica, combinada com as tendências modernas. Oferecemos um ambiente acolhedor e um serviço de excelência para o homem contemporâneo.</p>
+        <p class="text-muted">Fundada em 1983, a <i class="bi bi-scissors" ></i> De Ouro nasceu da paixão pela arte da barbearia clássica, combinada com as tendências modernas. Oferecemos um ambiente acolhedor e um serviço de excelência para o homem contemporâneo.</p>
         <p class="text-muted">Nossa equipe é formada por barbeiros experientes e dedicados, prontos para oferecer o corte ou barba perfeita, utilizando produtos de alta qualidade e as melhores técnicas.</p>
         <%= link_to "Conheça Nossos Serviços", '#services', class: "btn btn-outline-dark mt-2" %> <%# Link interno para a seção de serviços %>
       </div>

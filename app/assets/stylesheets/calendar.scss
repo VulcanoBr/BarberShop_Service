@@ -1,0 +1,76 @@
+/* app/assets/stylesheets/calendar.scss */
+
+.calendar-table {
+  th,
+  td {
+    text-align: center;
+    padding: 0;
+  }
+
+  th {
+    font-weight: 500;
+    font-size: 0.85rem;
+    background-color: #f8f9fa;
+  }
+
+  .calendar-day {
+    position: relative;
+    min-width: 40px;
+    height: 40px;
+    transition: all 0.2s ease-in-out;
+
+    a {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+      }
+    }
+
+    &.bg-primary a:hover {
+      background-color: darken(#0d6efd, 5%);
+    }
+
+    &.bg-success a:hover {
+      background-color: darken(#198754, 5%);
+    }
+  }
+
+  /* Destaca dias com mais horários disponíveis */
+  .calendar-day.has-many-slots::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.8;
+  }
+}
+
+/* Legendas */
+.calendar-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      margin-right: 4px;
+      border-radius: 2px;
+    }
+  }
+}

@@ -1,19 +1,17 @@
 class AppointmentsController < ApplicationController
 
   def new
-    @appointment = Appointment.new(appointment_date: params[:date]) # Pega data do parametro se existir
+    @appointment = Appointment.new(appointment_date: params[:date])
 
     @selected_date = if params[:date].present?
       Date.parse(params[:date])
     else
       today = Date.current
-      if today.sunday?
-        today + 1.day
-      else
-        today
-      end
+      today.sunday? ? today + 1.day : today
     end
-    @available_slots = Appointment.available_slots(@selected_date)
+
+    @available_slots = AppointmentAvailability.generate_slots_for_date(@selected_date)
+
     @services = Service.all
 
     if params[:month].present? && params[:year].present?
@@ -25,9 +23,8 @@ class AppointmentsController < ApplicationController
 
   def create
     @appointment = Appointment.new(appointment_params)
-    puts("params = #{appointment_params.inspect}")
     service = Service.find_by(id: params[:appointment][:service_id])
-    @appointment.price = service.price
+    @appointment.price = service&.price || 0
 
     if @appointment.appointment_date && params[:appointment][:time_employee_combined].present?
       time_str, employee_id = params[:appointment][:time_employee_combined].split('|')
@@ -37,14 +34,14 @@ class AppointmentsController < ApplicationController
     end
 
     if @appointment.save
+      AppointmentAvailability.clear_cache
       AppointmentMailer.with(appointment: @appointment).confirmation_email.deliver_now
       redirect_to appointment_path(@appointment), notice: 'Agendamento realizado com sucesso!'
     else
       @selected_date = @appointment.appointment_date || Date.current
-      @available_slots = Appointment.available_slots(@selected_date)
+      @available_slots = AppointmentAvailability.generate_slots_for_date(@selected_date)
       @services = Service.all
       @current_month = @selected_date.beginning_of_month
-
       flash.now[:alert] = "Erro ao agendar. Verifique os campos."
       render :new, status: :unprocessable_entity
     end

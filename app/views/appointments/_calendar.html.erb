@@ -1,0 +1,55 @@
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <%= link_to new_appointment_path(month: (current_month - 1.month).month, year: (current_month - 1.month).year), 
+                class: "btn btn-sm btn-outline-secondary" do %>
+      <i class="bi bi-chevron-left"></i>
+    <% end %>
+    
+    <div class="fw-bold">
+      <%= I18n.l(current_month, format: "%B %Y") %>
+    </div>
+    
+    <%= link_to new_appointment_path(month: (current_month + 1.month).month, year: (current_month + 1.month).year), 
+                class: "btn btn-sm btn-outline-secondary" do %>
+      <i class="bi bi-chevron-right"></i>
+    <% end %>
+  </div>
+  
+  <div class="card-body p-2">
+    <table class="table table-bordered calendar-table">
+      <thead>
+        <tr>
+          <% %w(S T Q Q S S D).each do |day| %>
+            <th class="text-center"><%= day %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% date_range = (current_month.beginning_of_month.beginning_of_week..current_month.end_of_month.end_of_week).to_a %>
+        <% date_range.each_slice(7) do |week| %>
+          <tr>
+            <% week.each do |day| %>
+              <%= render 'calendar_day', 
+                        day: day, 
+                        current_month: current_month, 
+                        selected_date: selected_date %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <div class="small text-muted mt-2">
+      <div class="mb-1">
+        <span class="d-inline-block border border-primary me-1" style="width: 12px; height: 12px;"></span> Hoje
+      </div>
+      <div class="mb-1">
+        <span class="d-inline-block bg-primary me-1" style="width: 12px; height: 12px;"></span> Selecionado
+      </div>
+      <div>
+        <span class="d-inline-block bg-black me-1" style="width: 12px; height: 12px; border-radius: 50%;"></span> Disponível
+      </div>
+    </div>
+  </div>
+</div>

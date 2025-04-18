@@ -8,7 +8,6 @@ module Admin
     def index
       appointments_scope = Appointment.includes(:service)
 
-      # Verificamos se existem parâmetros de pesquisa
       if params[:search].present?
         if params[:search][:appointment_date].present?
           date = Date.parse(params[:search][:appointment_date]) rescue nil
@@ -20,17 +19,13 @@ module Admin
           appointments_scope = appointments_scope.where("client_name ILIKE ?", name_query)
         end
 
-        # Se nenhum filtro for aplicado, mantemos a lógica original
         if !params[:search][:appointment_date].present? && !params[:search][:client_name].present?
           appointments_scope = appointments_scope.where('appointment_date >= ?', Date.today)
         end
       else
-        # Comportamento padrão: mostrar agendamentos a partir da data atual
         appointments_scope = appointments_scope.where('appointment_date >= ?', Date.today)
-
       end
 
-      # Ordenação dos resultados
       appointments_scope = appointments_scope.order(appointment_date: :desc, start_time: :desc)
 
       @pagy_appointments, @appointments = pagy(appointments_scope, page_param: :page_appointments, limit: 10)
@@ -38,7 +33,7 @@ module Admin
 
     def edit
       @selected_date = params[:date].present? ? Date.parse(params[:date]) : Date.current
-      @available_slots = Appointment.available_slots_for_edit(@selected_date, @appointment.id)
+      @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
       if @selected_date == @appointment.appointment_date
         @time_employee_combined = "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
       else
@@ -64,6 +59,7 @@ module Admin
         params[:appointment][:employee_id] = employee_id
       end
       if @appointment.update(appointment_params)
+        AppointmentAvailability.clear_cache
         if @appointment.saved_change_to_start_time? || @appointment.saved_change_to_appointment_date?  ||
           @appointment.saved_change_to_service_id?
           AppointmentMailer.with(appointment: @appointment).confirmation_email.deliver_now
@@ -72,7 +68,7 @@ module Admin
       else
         original_date = @appointment.appointment_date_was
         @selected_date = params[:date].present? ? Date.parse(params[:date]) : @appointment.appointment_date
-        @available_slots = Appointment.available_slots_for_edit(@selected_date, @appointment.id)
+        @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
 
         if @selected_date == original_date
           @time_employee_combined = "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
@@ -94,6 +90,7 @@ module Admin
 
     def destroy
       if @appointment.destroy
+        AppointmentAvailability.clear_cache
         redirect_to admin_appointments_url, notice: 'Agendamento excluído com sucesso.'
       else
         redirect_to admin_appointments_url, alert: 'Não foi possível excluir o agendamento.'

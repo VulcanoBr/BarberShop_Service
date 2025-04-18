@@ -1,0 +1,47 @@
+<%
+  today = Date.current
+  is_today = day == today
+  is_selected = day == selected_date
+  is_current_month = day.month == current_month.month
+  is_past = day < today
+  is_sunday = day.wday == 0
+  has_availability = AppointmentAvailability.has_slots_for_date?(day) # Helper method you'll need to implement
+  is_available = day >= today && day <= (today + 30.days) && !is_sunday && is_current_month
+  
+  if defined?(appointment) && appointment.persisted? && day == appointment.appointment_date
+    is_available = true
+  end
+  
+  classes = []
+  classes << "text-muted" if !is_current_month
+  classes << (is_selected ? "bg-primary text-white" : "")
+  classes << "border-primary" if is_today
+  classes << (is_past || is_sunday ? "bg-light" : "")
+  classes << "bg-success-subtle" if is_available && has_availability && !is_selected && !is_past
+%>
+
+<td class="calendar-day text-center <%= classes.join(' ') %>" style="height: 40px; width: 40px; position: relative;">
+  <% if is_available %>
+    <% 
+      # Determinar a URL com base no contexto (new ou edit)
+      if defined?(appointment) && appointment.persisted?
+        day_url = edit_admin_appointment_path(appointment, date: day.to_s, month: current_month.month, year: current_month.year)
+      else
+        day_url = new_appointment_path(date: day.to_s, month: current_month.month, year: current_month.year)
+      end
+    %>
+    
+    <%= link_to day.day.to_s, 
+              day_url,
+              class: "d-block w-100 h-100 #{'text-white' if is_selected}",
+              style: "text-decoration: none; line-height: 40px;" %>
+              
+    <% if has_availability && !is_past && !is_selected %>
+      <span class="position-absolute" style="bottom: 2px; right: 2px; width: 6px; height: 6px; background-color: #198754; border-radius: 50%;"></span>
+    <% end %>
+  <% else %>
+    <span class="<%= is_current_month ? '' : 'text-muted' %>" style="line-height: 40px;">
+      <%= day.day %>
+    </span>
+  <% end %>
+</td>

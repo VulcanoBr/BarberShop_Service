@@ -2,7 +2,6 @@ module Admin
 
   class EmployeesController < AdminController
 
-    #before_action :authenticate_admin!
     before_action :set_employee, only: [:show, :edit, :update, :destroy]
 
     def index
