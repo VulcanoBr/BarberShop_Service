@@ -6,12 +6,14 @@ class AppointmentAvailability
   SERVICE_DURATION = 60 # minutos
 
   def self.has_slots_for_date?(date)
+    date = date.is_a?(String) ? Date.parse(date) : date
     return false if date.nil? || date.sunday? || date < Date.current
 
     generate_slots_for_date(date).present?
   end
 
   def self.generate_slots_for_date(date)
+    date = date.is_a?(String) ? Date.parse(date) : date
     return [] if date.nil? || date.sunday? || date < Date.current
 
     @available_slots_cache ||= {}
@@ -46,6 +48,16 @@ class AppointmentAvailability
     end
 
     @available_slots_cache[date] = all_slots.sort_by { |slot| slot[0] }
+  end
+
+  def self.slot_available?(date, time_str, employee_id)
+    return false if date.nil? || time_str.blank? || employee_id.blank?
+
+    hour, minute = time_str.split(':').map(&:to_i)
+    time = date.to_time.change(hour: hour, min: minute)
+
+    # Verifica se já existe um agendamento para este horário e funcionário
+    !Appointment.exists?(appointment_date: date, start_time: time, employee_id: employee_id)
   end
 
   def self.clear_cache

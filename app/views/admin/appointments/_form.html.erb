@@ -19,7 +19,7 @@
           Editar Agendamento para: <strong><%= format_date_br(@selected_date) %></strong>
         </div>
         <div class="card-body" data-controller="maskphone">
-          <%= simple_form_for @appointment, url: admin_appointment_path(@appointment), method: :patch, html: { data: { turbo: false } } do |f| %>
+          <%= simple_form_for @appointment_form, url: admin_appointment_path(@appointment), method: :patch, html: { data: { turbo: false } } do |f| %>
             <%# Campo oculto para enviar a data selecionada %>
             <%= f.hidden_field :appointment_date, value: @selected_date %>
 
@@ -49,9 +49,10 @@
             <hr>
 
             <%# --- Seleção de Serviço --- %>
-            <%= f.association :service,
+            <%= f.input :service_id,
                               collection: @services,
                               label_method: :name_with_price,
+                              value_method: :id,
                               label: "Escolha o Serviço",
                               prompt: "Selecione um serviço",
                               input_html: { class: "form-select" },

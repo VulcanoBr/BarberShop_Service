@@ -32,6 +32,15 @@ module Admin
     end
 
     def edit
+      set_selected_date
+      set_available_slots
+      set_time_employee_combined
+      load_services
+      set_current_month
+      @appointment_form = AppointmentForm.new(@appointment)
+    end
+
+    def _OLD_edit
       @selected_date = params[:date].present? ? Date.parse(params[:date]) : Date.current
       @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
       if @selected_date == @appointment.appointment_date
@@ -45,42 +54,16 @@ module Admin
       else
         @current_month = Date.current.beginning_of_month
       end
+
+      @appointment_form = AppointmentForm.new(@appointment)
     end
 
     def update
-      service = Service.find_by(id: params[:appointment][:service_id])
-      @appointment.price = service.price
-
-      if params[:appointment][:appointment_date] && params[:appointment][:time_employee_combined].present?
-        time_str, employee_id = params[:appointment][:time_employee_combined].split('|')
-        hour, minute = time_str.split(':').map(&:to_i)
-        params[:appointment][:start_time] =
-          Date.parse(params[:appointment][:appointment_date]).to_time.change(hour: hour, min: minute)
-        params[:appointment][:employee_id] = employee_id
-      end
-      if @appointment.update(appointment_params)
-        AppointmentAvailability.clear_cache
-        if @appointment.saved_change_to_start_time? || @appointment.saved_change_to_appointment_date?  ||
-          @appointment.saved_change_to_service_id?
-          AppointmentMailer.with(appointment: @appointment).confirmation_email.deliver_now
-        end
+      @appointment_form = AppointmentForm.new(@appointment, appointment_form_params)
+      if @appointment_form.save
         redirect_to admin_appointment_path(@appointment), notice: 'Agendamento atualizado com sucesso.'
       else
-        original_date = @appointment.appointment_date_was
-        @selected_date = params[:date].present? ? Date.parse(params[:date]) : @appointment.appointment_date
-        @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
-
-        if @selected_date == original_date
-          @time_employee_combined = "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
-        else
-          @time_employee_combined = ""
-        end
-        @services = Service.all
-        if params[:month].present? && params[:year].present?
-          @current_month = Date.new(params[:year].to_i, params[:month].to_i, 1)
-        else
-          @current_month = Date.current.beginning_of_month
-        end
+        setup_edit_variables
         render :edit, status: :unprocessable_entity
       end
     end
@@ -103,17 +86,79 @@ module Admin
       @appointment = Appointment.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         redirect_to admin_appointments_path, alert: "Agendamento não encontrado."
-      end
+    end
 
-      def appointment_params
-        params.require(:appointment).permit(
-          :appointment_date,
-          :start_time,
-          :time_employee_combined,
-          :service_id,
-          :employee_id
+    def set_selected_date
+      @selected_date = if params[:date].present?
+                         Date.parse(params[:date])
+                       else
+                         Date.current
+                       end
+    rescue ArgumentError
+      @selected_date = Date.current
+      flash.now[:alert] = "Data inválida, usando data atual"
+    end
+
+    def set_available_slots
+      @available_slots = AppointmentAvailability.available_slots_for_edit(
+        @selected_date,
+        @appointment.id
+      )
+    end
+
+    def set_time_employee_combined
+      @time_employee_combined = if @selected_date == @appointment.appointment_date
+                                  "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
+                                else
+                                  ""
+                                end
+    end
+
+    def load_services
+      @services = Service.all
+    end
+
+    def set_current_month
+      if params[:month].present? && params[:year].present?
+        @current_month = Date.new(
+          params[:year].to_i,
+          params[:month].to_i,
+          1
         )
+      else
+        @current_month = Date.current.beginning_of_month
       end
+    end
+
+    def setup_edit_variables
+      original_date = @appointment.appointment_date_was
+      @selected_date = @appointment_form.appointment_date || @appointment.appointment_date
+      @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
+      if @selected_date == original_date
+        @time_employee_combined = "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
+      else
+        @time_employee_combined = ""
+      end
+      @services = Service.all
+
+      if params[:month].present? && params[:year].present?
+        @current_month = Date.new(params[:year].to_i, params[:month].to_i, 1)
+      else
+        @current_month = Date.current.beginning_of_month
+      end
+    end
+
+    def appointment_form_params
+      params.require(:admin_appointment_form).permit(
+        :appointment_date,
+        :time_employee_combined,
+        :service_id,
+        :client_name,
+        :client_phone,
+        :client_email
+      )
+    end
   end
+
 
 end
