@@ -40,24 +40,6 @@ module Admin
       @appointment_form = AppointmentForm.new(@appointment)
     end
 
-    def _OLD_edit
-      @selected_date = params[:date].present? ? Date.parse(params[:date]) : Date.current
-      @available_slots = AppointmentAvailability.available_slots_for_edit(@selected_date, @appointment.id)
-      if @selected_date == @appointment.appointment_date
-        @time_employee_combined = "#{@appointment.start_time.strftime('%H:%M')}|#{@appointment.employee_id}"
-      else
-        @time_employee_combined = ""
-      end
-      @services = Service.all
-      if params[:month].present? && params[:year].present?
-        @current_month = Date.new(params[:year].to_i, params[:month].to_i, 1)
-      else
-        @current_month = Date.current.beginning_of_month
-      end
-
-      @appointment_form = AppointmentForm.new(@appointment)
-    end
-
     def update
       @appointment_form = AppointmentForm.new(@appointment, appointment_form_params)
       if @appointment_form.save
