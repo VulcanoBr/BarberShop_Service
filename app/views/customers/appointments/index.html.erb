@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Gerenciar Agendamentos</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      Lista de Agendamentos (<%= @appointments.count %>)
+      <div class="flex-grow-1 flex-md-grow-0"> <%# Ocupa espaço disponível, mas não cresce demais em telas maiores %>
+        <%= simple_form_for :search, url: customers_appointments_path, method: :get, html: { class: 'mb-0' } do |f| %>
+          <div class="input-group input-group-sm me-2"> <%# Grupo para juntar campos e botão %>
+            <%= f.input_field :appointment_date,
+                              as: :date, 
+                              html5: true,
+                              placeholder: "Data (DD/MM/AAAA)",
+                              class: 'form-control form-control-sm me-3'
+                              %>
+            
+            <button class="btn btn-sm btn-outline-secondary" type="submit">
+              <i class="bi bi-search me-2"></i> Pesquisar
+            </button>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <% if @pagy_appointments.count > 10 %>
+          <%== pagy_bootstrap_nav(@pagy_appointments).html_safe %>
+        <% end %>
+      </div>
+    </div>
+    <div class="card-body p-0"> <%# p-0 para a tabela encostar nas bordas do card %>
+      <% if @appointments.any? %>
+        <div class="table-responsive"> <%# Para melhor visualização em telas pequenas %>
+          <table class="table table-striped table-hover mb-0"> <%# mb-0 para remover margem inferior da tabela %>
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Profissional</th>
+                <th scope="col">Serviço</th>
+                <th scope="col" class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @appointments.each do |appointment| %>
+                <tr>
+                  <td><%= format_date_br(appointment.appointment_date) %></td>
+                  <td><%= appointment.start_time.strftime('%H:%M') %></td>
+                  <td><%= appointment.employee.surname %></td>
+                  <td><%= appointment.service&.name || 'Serviço Excluído' %></td> <%# Tratamento caso serviço seja deletado %>
+                  <td class="text-end">
+                    <% if appointment&.appointment_date && appointment.appointment_date > Date.today %>
+                    
+                      <%= link_to customers_appointment_path(appointment), class: "btn btn-sm btn-outline-info", title: "Ver Detalhes" do %>
+                            <i class="bi bi-eye"></i>
+                      <% end %>
+                      <%= link_to 'Cancelar', customers_appointment_path(appointment),
+                                  class: 'btn btn-sm btn-danger',
+                                  data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja cancelar o seu agendamento de #{format_date_br(appointment.appointment_date)} às #{appointment.start_time.strftime('%H:%M')}?" } %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="alert alert-info m-3" role="alert"> <%# m-3 se p-0 no card-body %>
+          <% if params.dig(:search, :appointment_date).present?  %>
+            Nenhum agendamento encontrado com os filtros aplicados.
+          <% else %>
+            Nenhum agendamento encontrado.
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

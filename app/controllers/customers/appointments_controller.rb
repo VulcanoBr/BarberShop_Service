@@ -1,12 +1,13 @@
-module Admin
-  class AppointmentsController < AdminController
+module Customers
+  class AppointmentsController < BaseController
 
     include Pagy::Backend
 
     before_action :set_appointment, only: [:show, :edit, :update, :destroy]
 
     def index
-      appointments_scope = Appointment.includes(:service)
+
+      appointments_scope = Appointment.for_customer(current_customer).future.sorted_by_date
 
       if params[:search].present?
         if params[:search][:appointment_date].present?
@@ -14,12 +15,7 @@ module Admin
           appointments_scope = appointments_scope.where(appointment_date: date) if date
         end
 
-        if params[:search][:client_name].present?
-          name_query = "%#{params[:search][:client_name]}%"
-          appointments_scope = appointments_scope.where("client_name ILIKE ?", name_query)
-        end
-
-        if !params[:search][:appointment_date].present? && !params[:search][:client_name].present?
+        if !params[:search][:appointment_date].present?
           appointments_scope = appointments_scope.where('appointment_date >= ?', Date.today)
         end
       else
@@ -43,7 +39,7 @@ module Admin
     def update
       @appointment_form = AppointmentForm.new(@appointment, appointment_form_params)
       if @appointment_form.save
-        redirect_to admin_appointment_path(@appointment), notice: 'Agendamento atualizado com sucesso.'
+        redirect_to customers_appointment_path(@appointment), notice: 'Agendamento atualizado com sucesso.'
       else
         setup_edit_variables
         render :edit, status: :unprocessable_entity
@@ -56,9 +52,9 @@ module Admin
     def destroy
       if @appointment.destroy
         AppointmentAvailability.clear_cache
-        redirect_to admin_appointments_url, notice: 'Agendamento excluído com sucesso.'
+        redirect_to customers_appointments_url, notice: 'Agendamento excluído com sucesso.'
       else
-        redirect_to admin_appointments_url, alert: 'Não foi possível excluir o agendamento.'
+        redirect_to customers_appointments_url, alert: 'Não foi possível excluir o agendamento.'
       end
     end
 
@@ -67,7 +63,7 @@ module Admin
     def set_appointment
       @appointment = Appointment.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        redirect_to admin_appointments_path, alert: "Agendamento não encontrado."
+        redirect_to customers_appointments_path, alert: "Agendamento não encontrado."
     end
 
     def set_selected_date
@@ -131,7 +127,7 @@ module Admin
     end
 
     def appointment_form_params
-      params.require(:admin_appointment_form).permit(
+      params.require(:customers_appointment_form).permit(
         :appointment_date,
         :time_employee_combined,
         :service_id,

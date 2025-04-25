@@ -1,0 +1,21 @@
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Definir Nova Senha</div>
+      <div class="card-body">
+        <%= simple_form_for @customer, url: "/customers/password/reset/#{params[:token]}", method: :patch,
+                            html: { class: 'needs-validation', novalidate: true } do |f| %>
+          <%= f.error_notification %>
+          
+          <%= f.input :password, label: "Nova Senha", required: true, input_html: { class: "form-control" } %>
+          <%= f.input :password_confirmation, label: "Confirme a Nova Senha", required: true, input_html: { class: "form-control" } %>
+          
+          <div class="d-grid gap-2 mt-3">
+            <%= f.button :submit, "Atualizar Senha", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

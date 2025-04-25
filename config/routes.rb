@@ -12,6 +12,35 @@ Rails.application.routes.draw do
     root to: 'appointments#index' # Raiz da área admin
   end
 
+  namespace :customers do
+    get 'login', to: 'sessions#new'
+    post 'login', to: 'sessions#create'
+    delete 'logout', to: 'sessions#destroy'
+
+    get 'signup', to: 'registrations#new'
+    post 'signup', to: 'registrations#create'
+
+    get 'profile', to: 'profile#edit'
+    patch 'profile', to: 'profile#update'
+
+    get 'password', to: 'passwords#edit'
+    patch 'password', to: 'passwords#update'
+
+    get 'password/forgot', to: 'password_resets#new', as: 'forgot_password'
+    post 'password/forgot', to: 'password_resets#create'
+    get 'password/reset/:token', to: 'password_resets#edit', as: 'password_reset'
+    patch 'password/reset/:token', to: 'password_resets#update'
+
+    get 'confirm/:token', to: 'confirmations#confirm', as: 'confirm'
+
+    resources :appointments, only: [:index, :show, :edit, :update, :destroy]
+
+    root to: 'dashboard#index'
+  end
+
+
+
+
   # Rota principal para agendamento
   get 'agendar', to: 'appointments#new', as: 'new_appointment'
   resources :appointments, only: [:create, :show]

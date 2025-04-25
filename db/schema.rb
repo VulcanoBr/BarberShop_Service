@@ -36,10 +36,31 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_04_211125) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.bigint "service_id", null: false
     t.bigint "employee_id"
+    t.bigint "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_appointments_on_customer_id"
     t.index ["employee_id"], name: "index_appointments_on_employee_id"
     t.index ["service_id"], name: "index_appointments_on_service_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.string "password_digest"
+    t.boolean "email_confirmed", default: false
+    t.string "confirmation_token"
+    t.string "remember_token"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["confirmation_token"], name: "index_customers_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_customers_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
   end
 
   create_table "employees", force: :cascade do |t|
@@ -60,6 +81,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_04_211125) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "appointments", "customers"
   add_foreign_key "appointments", "employees"
   add_foreign_key "appointments", "services"
 end

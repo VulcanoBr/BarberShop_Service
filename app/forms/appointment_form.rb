@@ -5,7 +5,7 @@ class AppointmentForm
 
   # Atributos do formulário
   attr_accessor :appointment_date, :time_employee_combined, :client_name,
-                :client_phone, :client_email, :service_id, :user
+                :client_phone, :client_email, :service_id, :customer_id
 
   # Validações
   validates :appointment_date, presence: true
@@ -18,6 +18,10 @@ class AppointmentForm
   validate :time_within_working_hours
   # validate :slot_availability
 
+  def initialize(attributes = {})
+    super(attributes)
+  end
+
   def save
     return false unless valid?
 
@@ -29,6 +33,7 @@ class AppointmentForm
       appointment_date: appointment_date,
       start_time: @start_time,
       employee_id: @employee_id,
+      customer_id: customer_id,
       client_name: client_name,
       client_phone: client_phone,
       client_email: client_email,
@@ -41,7 +46,7 @@ class AppointmentForm
       send_confirmation_email(@appointment)
       @appointment
     else
-      errors.merge!(appointment.errors)
+      errors.merge!(@appointment.errors)
       false
     end
   end

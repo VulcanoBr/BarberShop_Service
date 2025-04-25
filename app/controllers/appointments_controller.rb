@@ -1,8 +1,17 @@
-class AppointmentsController < ApplicationController
+class AppointmentsController < Customers::BaseController
+
+ # before_action :authenticate_customers!
 
   def new
 
-    @appointment_form = AppointmentForm.new(appointment_date: params[:date])
+    form_attributes = {
+      appointment_date: params[:date],
+      client_name: current_customer.name,
+      client_phone: current_customer.phone,
+      client_email: current_customer.email,
+      customer_id: current_customer.id # Passe o ID aqui
+    }
+    @appointment_form = AppointmentForm.new(form_attributes)
 
     @selected_date = selected_date(params[:date])
 
@@ -15,11 +24,13 @@ class AppointmentsController < ApplicationController
   end
 
   def create
-    @appointment_form = AppointmentForm.new(appointment_form_params)
+    form_params = appointment_form_params.merge(customer_id: current_customer.id)
+    @appointment_form = AppointmentForm.new(form_params)
+
 
     if (appointment = @appointment_form.save)
-      redirect_to appointment_path(appointment),
-                  notice: 'Agendamento realizado com sucesso!'
+      flash[:notice] = 'Agendamento realizado com sucesso!'
+      redirect_to appointment_path(appointment)
     else
       setup_edit_variables
       flash.now[:alert] = "Erro ao agendar. Verifique os campos."
@@ -59,10 +70,16 @@ class AppointmentsController < ApplicationController
 
   def setup_edit_variables
     date_from_form = @appointment_form.appointment_date
-    @selected_date = date_from_form.is_a?(String) ? Date.parse(date_from_form) : (date_from_form || Date.current)
+
+    if date_from_form.is_a?(String) && date_from_form.present?
+      @selected_date = parse_date(date_from_form) || Date.current
+    else
+      @selected_date = date_from_form.to_date
+    end
     @available_slots = AppointmentAvailability.generate_slots_for_date(@selected_date)
     @services = Service.all
-    @current_month = current_month(params[:month], params[:year])
+
+    @current_month = @selected_date.beginning_of_month
   end
 
   def appointment_form_params

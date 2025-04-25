@@ -1,0 +1,30 @@
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">Recuperar Senha Cliente <i class="bi bi-scissors" ></i> De Ouro.</div>
+      <div>
+        <% flash.each do |key, value| %>
+          <div data-controller="flash" data-action="click->flash#removeMessage" id="flash-message" class="flash <%= key %> alert alert-danger bold text-black" data-flash-target="message"><%= value %></div>
+        <% end %>
+      </div>
+      <div class="card-body">
+        <%= simple_form_for :customer, url: customers_forgot_password_path, html: { class: 'needs-validation', novalidate: true } do |f| %>
+          <p class="text-muted mb-4">Digite seu email para receber as instruções de recuperação de senha.</p>
+          
+          <%= f.input :email, label: "Email", required: true, input_html: { class: "form-control" } %>
+          
+          <div class="d-grid gap-2 mt-3">
+            <%= f.button :submit, "Enviar Instruções", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+        
+        <div class="mt-3 text-center">
+          <p>
+            <%= link_to "Voltar para o login", customers_login_path %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

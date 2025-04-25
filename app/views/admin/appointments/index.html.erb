@@ -73,7 +73,7 @@
       </div>
     <% else %>
       <div class="alert alert-info m-3" role="alert"> <%# m-3 se p-0 no card-body %>
-        <% if params[:search][:client_name].present? || params[:search][:appointment_date].present? %>
+        <% if params.dig(:search, :client_name).present? || params.dig(:search, :appointment_date).present? %>
           Nenhum agendamento encontrado com os filtros aplicados.
         <% else %>
           Nenhum agendamento encontrado.

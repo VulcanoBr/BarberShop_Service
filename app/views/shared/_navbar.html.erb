@@ -14,6 +14,32 @@
         </li>
         
       </ul>
+
+       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <% if logged_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+              <%= current_customer.name %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%= link_to "Dashboard", customers_root_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Meu Perfil", customers_profile_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Alterar Senha", customers_password_path, class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= button_to "Sair", customers_logout_path, method: :delete, class: "dropdown-item" %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Entrar", customers_login_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Cadastrar", customers_signup_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
       <ul class="navbar-nav">
         <% if admin_user_signed_in? %>
           <li class="nav-item">

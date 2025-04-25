@@ -1,0 +1,29 @@
+
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Editar Perfil</div>
+      <div class="card-body" data-controller="maskphone">
+        <%= simple_form_for @customer, url: customers_profile_path, method: :patch, html: { class: 'needs-validation', novalidate: true } do |f| %>
+          <%= f.error_notification %>
+          
+          <%= f.input :name, label: "Nome", required: true, input_html: { class: "form-control" } %>
+          <%= f.input :email, label: "Email", required: true, input_html: { class: "form-control" }, disabled: true %>
+          <%= f.input :phone, label: "Telefone (com DDD)", required: true, input_html: { 
+                class: "form-control", 
+                placeholder: "(XX) XXXXX-XXXX", 
+                maxlength: "15", 
+                "data-maskphone-target": "inputPhone", 
+                "data-action": "keyup->maskphone#addMaskToPhoneFields" } 
+            %>
+          
+          <div class="d-grid gap-2 mt-3">
+            <%= f.button :submit, "Atualizar Perfil", class: "btn btn-primary" %>
+            <%= link_to 'Cancelar', customers_root_path, class: 'btn btn-secondary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

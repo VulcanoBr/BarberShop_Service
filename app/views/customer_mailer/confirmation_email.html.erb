@@ -1,0 +1,10 @@
+
+<h1>Confirme seu cadastro</h1>
+
+<p>Olá <%= @customer.name %>,</p>
+
+<p>Obrigado por se cadastrar! Para ativar sua conta, clique no link abaixo:</p>
+
+<p><%= link_to 'Confirmar minha conta', @confirmation_url %></p>
+
+<p>Se você não solicitou este cadastro, por favor ignore este email.</p>

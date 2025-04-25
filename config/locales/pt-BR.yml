@@ -27,6 +27,13 @@ pt-BR:
               blank: 'não pode ficar em branco'
               not_a_number: 'não e um numero'
               greater_than: 'tem que ser maior que 0.00 (zero)'
+        customer:
+          attributes:
+            password:
+              too_short: ' quantidade de caracters menor que o minimo requerido'
+            password_confirmation:
+              blank: 'não pode ficar em branco'
+              confirmation: 'incorreta'
       messages:
         blank: 'não pode ficar em branco'
   errors:

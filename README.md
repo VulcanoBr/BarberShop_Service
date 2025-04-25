@@ -13,12 +13,23 @@ O objetivo principal é oferecer uma interface moderna, reativa e eficiente tant
 
 ### Para Clientes (Interface Pública)
 
+- **Autenticação Segura:** Login/Logout para acesso à área do cliente (sem uso de Devise).
+- **Cadastro Seguro:** Sign_up/Password_reset/Password_Forgot (sem uso de Devise)
+- **Notificação por Email:** Envio automático de um email para confirmação de Sign_up/Password_Forgot.
 - **Visualização de Serviços:** Lista dos serviços oferecidos pela barbearia.
 - **Seleção de Data:** Calendário interativo para escolher a data desejada para o agendamento.
 - **Visualização de Horários Disponíveis:** Exibição dinâmica dos horários vagos para a data e serviço selecionados. **_A disponibilidade considera tanto os horários de funcionamento quanto a disponibilidade dos funcionários para realizar o serviço naquele horário._**
-- **Formulário de Agendamento:** Campos para inserir informações do cliente (nome, email, telefone) e selecionar o serviço e horário desejado. **_(O sistema designa um funcionário disponível para o horário escolhido)_**.
+- **Formulário de Agendamento:** Campos para informações do cliente (nome, email, telefone) logado e selecionar o serviço e horário desejado. **_(O sistema designa um funcionário disponível para o horário escolhido)_**.
 - **Confirmação Instantânea:** Feedback imediato sobre o sucesso ou falha do agendamento.
 - **Notificação por Email:** Envio automático de um email de confirmação após o agendamento bem-sucedido.
+- **Gerenciamento de Agendamentos:**
+  - Listar todos os agendamentos (com possibilidade de filtros por data).
+  - Visualizar detalhes de um agendamento específico.
+  - **_Reagendar agendamentos existentes:_**
+    - **_Seleção de nova data/horário (futuro)._**
+    - **_Verificação de disponibilidade (horário e funcionário)._**
+    - **_Envio de notificação por email sobre o reagendamento._**
+  - Excluir agendamentos.
 
 ### Para Administradores (Área Restrita)
 

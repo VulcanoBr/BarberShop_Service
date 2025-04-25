@@ -1,0 +1,83 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Detalhes do Agendamento</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group">
+        <%= link_to customers_appointments_path, class: "btn btn-sm btn-outline-secondary me-3" do %>
+          <i class="bi bi-arrow-left"></i> Voltar
+        <% end %>
+        <% if @appointment&.appointment_date && @appointment.appointment_date > Date.today %>
+          <%= link_to edit_customers_appointment_path(@appointment, date: @appointment.appointment_date), class: "btn btn-sm btn-outline-primary me-3" do %>
+            <i class="bi bi-pencil"></i> Reagendar
+          <% end %>
+          <%= link_to customers_appointment_path(@appointment), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja cancelar o seu agendamento de  #{format_date_br(@appointment.appointment_date)} às #{@appointment.start_time.strftime('%H:%M')}?" } , class: "btn btn-sm btn-outline-danger" do %>
+            <i class="bi bi-trash"></i> Cancelar
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Informações do Agendamento</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Status:</div>
+            
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Data:</div>
+            <div class="col-md-8"><%= l @appointment.appointment_date, format: :long %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Horário:</div>
+            <div class="col-md-8"><%= @appointment.start_time.strftime('%H:%M') %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Profissional:</div>
+            <div class="col-md-8"><%= @appointment.employee.name %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Serviço:</div>
+            <div class="col-md-8"><%= @appointment.service.name %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Valor:</div>
+            <div class="col-md-8"> <%= format_price(@appointment.price) %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Duração:</div>
+            <div class="col-md-8"><%= @appointment.service.duration %> minutos</div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Informações do Cliente</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-12 fw-bold">Nome:</div>
+            <div class="col-md-12"><%= @appointment.client_name %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12 fw-bold">E-mail:</div>
+            <div class="col-md-12"><%= @appointment.client_email %></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12 fw-bold">Telefone:</div>
+            <div class="col-md-12"><%= @appointment.client_phone %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -33,7 +33,7 @@ class AppointmentAvailability
         time_str = format('%02d:%02d', hour, 0)
 
         if date == Date.current
-          current_hour = Time.current.hour
+          current_hour = Time.current.hour + 1
           current_minute = Time.current.min
           next if hour < current_hour || (hour == current_hour && current_minute > 0)
         end
