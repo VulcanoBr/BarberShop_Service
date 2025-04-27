@@ -37,7 +37,7 @@
               style: "text-decoration: none; line-height: 40px;" %>
               
     <% if has_availability && !is_past && !is_selected %>
-      <span class="position-absolute" style="bottom: 2px; right: 2px; width: 6px; height: 6px; background-color: #198754; border-radius: 50%;"></span>
+      <i class="bi bi-scissors position-absolute" style="bottom: 2px; right: 2px; font-size: 0,25rem;" ></i>
     <% end %>
   <% else %>
     <span class="<%= is_current_month ? '' : 'text-muted' %>" style="line-height: 40px;">
