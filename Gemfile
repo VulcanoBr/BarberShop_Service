@@ -38,7 +38,7 @@ gem "bootsnap", require: false
 
 gem "simple_form", "~> 5.1"
 gem "devise"
-gem "simple_calendar", "~> 2.4"
+gem "simple_calendar", "~> 3.1"
 gem "pagy"
 gem "bcrypt", "~> 3.1.7"
 
